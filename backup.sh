@@ -7,16 +7,22 @@
 
 source "funktionen.sh"
 
-function backup(){
-	BACKUPFILE=$(date +%Y%m%d-%H%M%S)-backup.tgz
+function yesno-dialog(){
 	YESNO=0
 	until [ $YESNO = 1 ]
 	do
-		compress
-		echo "| Sind Sie sicher das Sie die Option ${COMPRESS}         |" 
+		$1
+		echo "| Sind Sie sicher das Sie die Option ${2}         |" 
 		echo "| benutzen möchten?                            |"
 		read -p "| (0: nein | 1: ja) " YESNO
 	done
+}
+
+function backup(){
+	BACKUPFILE=$(date +%Y%m%d-%H%M%S)-backup.tgz
+	
+	yesno-dialog compress COMPRESS
+	
 	# 
 	YESNO=0
 	until [ $YESNO = 1 ]
