@@ -2,46 +2,17 @@
 
 # Backupscript: Erstellen und Zurückspielen von Verzeichnissen
 # Author : Martin Rösner
-# E-Mail : roesner@elektronikschule.de
-# Version: v01
+# Co-Author: Till Lohr
+# E-Mail : roesner@elektronikschule.de 
+# Version: v02
 
 source "funktionen.sh"
 
-function yesno-dialog(){
-	YESNO=0
-	until [ $YESNO = 1 ]
-	do
-		$1
-		echo "| Sind Sie sicher das Sie die Option ${2}         |" 
-		echo "| benutzen möchten?                            |"
-		read -p "| (0: nein | 1: ja) " YESNO
-	done
-}
-
 function backup(){
 	BACKUPFILE=$(date +%Y%m%d-%H%M%S)-backup.tgz
-	
-	yesno-dialog compress COMPRESS
-	
-	# 
-	YESNO=0
-	until [ $YESNO = 1 ]
-	do
-		where2Backup
-		echo "| Sind Sie sicher das Sie hier in speichern möchten: ${WHERE2BACKUP}         |" 
-		echo "| benutzen möchten?                            |"
-		read -p "| (0: nein | 1: ja) " YESNO
-	done
-	#
-	YESNO=0
-	until [ $YESNO = 1 ]
-	do
-		what2Backup	
-		echo "| Sind Sie sicher das Sie dieses Verzeichnis sichern wollen? ${WHAT2BACKUP}         |" 
-		echo "| benutzen möchten?                            |"
-		read -p "| (0: nein | 1: ja) " YESNO
-	done
-		
+	yesno-dialog compress COMPRESS "Sind Sie sicher das Sie die Option benutzen möchten?"
+	yesno-dialog where2Backup WHERE2BACKUP "Sind Sie sicher das Sie hier in speichern möchten: "
+	yesno-dialog what2Backup WHAT2BACKUP "Sind Sie sicher das Sie dieses Verzeichnis sichern wollen? "
 	tar cf${COMPRESS} ${WHERE2BACKUP}/$BACKUPFILE ${WHAT2BACKUP}
 	sleep 2
 }
@@ -55,29 +26,14 @@ function listbackup(){
 }
 
 function deletebackup(){
-	YESNO=0
-	until [ $YESNO = 1 ]
-	do
-		where2Find
-		echo "| Wo sollen nach den Backups gesucht werden: ${WHERE2FIND}         |"
-		read -p "| (0: nein | 1: ja) " YESNO
-	done
+	yesno-dialog where2Find WHERE2FIND "Wo sollen nach den Backups gesucht werden: "
 	for I in $(find ${WHERE2FIND} -maxdepth 1 \( -name "*tgz" -o -name "*xz" -o -name "*bzip2" \) )
 	do 
         echo "|> "$I
     	done
-    
-	YESNO=0
-	until [ $YESNO = 1 ]
-	do
-		what2Del	
-		echo "| Sind Sie sicher das Sie dieses Backup löschen wollen? ${WHAT2DEL}         |" 
-		read -p "| (0: nein | 1: ja) " YESNO
-	done
-		
+   	yesno-dialog what2Del WHAT2DEL "Sind Sie sicher das Sie dieses Backup löschen wollen?" 
 	echo rm ${WHAT2DEL}
 	sleep 2
-
 }
 
 # Hauptereignisschleife

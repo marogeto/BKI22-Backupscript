@@ -1,3 +1,11 @@
+
+# Backupscript: Erstellen und Zurückspielen von Verzeichnissen
+# Author : Martin Rösner
+# Co-Author: Till Lohr
+# E-Mail : roesner@elektronikschule.de 
+# Version: v02
+
+
 # Hauptmenu ausgeben
 function menu(){
         clear
@@ -39,7 +47,7 @@ function where2Backup(){
 function what2Backup(){
         clear
         echo "|----------------------------------------------|"
-        echo "| Wohin soll das Backup gespeichert werden:    |"
+        echo "| Welches Verzeichnis soll gesichert werden:   |"
         echo "|                                              |"
         read -p "| Eingabe: " WHAT2BACKUP
 }
@@ -60,3 +68,15 @@ function what2Del(){
 	echo "|                                              |"
 	read -p "| Eingabe: " WHAT2DEL 
 }
+
+function yesno-dialog(){
+        YESNO=0
+        until [ $YESNO = 1 ]
+        do
+                $1
+                echo "| $3 \(${2}\)"  
+                read -p "| (0: nein | 1: ja) " YESNO
+        done
+}
+
+
