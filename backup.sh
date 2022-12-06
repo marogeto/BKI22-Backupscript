@@ -5,52 +5,7 @@
 # E-Mail : roesner@elektronikschule.de
 # Version: v01
 
-# Hauptmenu ausgeben
-function menu(){
-	clear
-	echo "|----------------------------------------------|"
-	echo "| Haupmenu:                                    |"
-	echo "|                                              |"
-	echo "|      Backup erstellen:      B                |"
-	echo "|      Inhalt eines Backups:  L                |"
-	echo "|      Backup zurück spielen: R                |"
-	echo "|      Backup löschen:        D                |"
-	echo "|      Programm beenden:      X                |"
-	echo "|                                              |"
-	read -p "| Eingabe: " EINGABE
-}
-
-# Eingeben der Kompressionsmethode
-function compress(){
-	clear
-	echo "|----------------------------------------------|"
-	echo "| Kompressionsmethode:                         |"
-	echo "|                                              |"
-	echo "|      ZIP:                   z                |"
-	echo "|      BZIP2:                 j                |"
-	echo "|      XZ:                    J                |"
-	echo "|                                              |"
-	read -p "| Eingabe: " COMPRESS
-}
-
-# Eingeben des Backuppfades
-function where2Backup(){
-	clear
-	echo "|----------------------------------------------|"
-	echo "| Wohin soll das Backup gespeichert werden:    |"
-	echo "|                                              |"
-	read -p "| Eingabe: " WHERE2BACKUP 
-}
-
-# Eingeben des Pfades, der gesichert werden soll
-function what2Backup(){
-	clear
-	echo "|----------------------------------------------|"
-	echo "| Wohin soll das Backup gespeichert werden:    |"
-	echo "|                                              |"
-	read -p "| Eingabe: " WHAT2BACKUP 
-}
-
+source "funktionen.sh"
 
 function backup(){
 	BACKUPFILE=$(date +%Y%m%d-%H%M%S)-backup.tgz
@@ -94,7 +49,29 @@ function listbackup(){
 }
 
 function deletebackup(){
-	echo "DELETEBACKUP"
+	YESNO=0
+	until [ $YESNO = 1 ]
+	do
+		where2Find
+		echo "| Wo sollen nach den Backups gesucht werden: ${WHERE2FIND}         |"
+		read -p "| (0: nein | 1: ja) " YESNO
+	done
+	for I in $(find ${WHERE2FIND} -maxdepth 1 \( -name "*tgz" -o -name "*xz" -o -name "*bzip2" \) )
+	do 
+        echo "|> "$I
+    	done
+    
+	YESNO=0
+	until [ $YESNO = 1 ]
+	do
+		what2Del	
+		echo "| Sind Sie sicher das Sie dieses Backup löschen wollen? ${WHAT2DEL}         |" 
+		read -p "| (0: nein | 1: ja) " YESNO
+	done
+		
+	echo rm ${WHAT2DEL}
+	sleep 2
+
 }
 
 # Hauptereignisschleife
