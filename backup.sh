@@ -22,14 +22,22 @@ function unbackup(){
 }
 
 function listbackup(){
-	echo "LISTBACKUP"
+	yesno-dialog where2Find WHERE2FIND "Wo sollen nach den Backups gesucht werden: "
+	for I in $(find ${WHERE2FIND} -maxdepth 1 \( -name "*tgz" -o -name "*xz" -o -name "*bzip2" \) )
+	do 
+	        echo "|> "$I
+    	done
+	yesno-dialog what2List WHAT2LIST "Sind Sie sicher das Sie dieses Backup auflisten wollen?" 
+	tar tf ${WHERE2LIST}
+	read -p "| Beliebige Taste drücken ..." 
+	sleep 1
 }
 
 function deletebackup(){
 	yesno-dialog where2Find WHERE2FIND "Wo sollen nach den Backups gesucht werden: "
 	for I in $(find ${WHERE2FIND} -maxdepth 1 \( -name "*tgz" -o -name "*xz" -o -name "*bzip2" \) )
 	do 
-        echo "|> "$I
+	        echo "|> "$I
     	done
    	yesno-dialog what2Del WHAT2DEL "Sind Sie sicher das Sie dieses Backup löschen wollen?" 
 	echo rm ${WHAT2DEL}
