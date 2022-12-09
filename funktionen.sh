@@ -61,6 +61,15 @@ function where2Find(){
 	read -p "| Eingabe: " WHERE2FIND 
 }
 
+# Eingeben des Backuppfades
+function where2Restore(){
+        clear
+        echo "|----------------------------------------------|"
+        echo "| Wohin soll das Backup ausgepackt werden:     |"
+        echo "|                                              |"
+        read -p "| Eingabe: " WHERE2RESTORE
+}
+
 # Eingeben des Backups, welches aufgelistet werden soll
 function what2List(){
 	clear
