@@ -18,15 +18,27 @@ function backup(){
 }
 
 function unbackup(){
-	echo "UNBACKUP"
+	yesno-dialog where2Find WHERE2FIND "Wo sollen nach den Backups gesucht werden: "
+	for I in $(find ${WHERE2FIND} -maxdepth 1 \( -name "*tgz" -o -name "*xz" -o -name "*bzip2" \) )
+	do 
+	    echo "|> "$I
+    done
+	yesno-dialog where2Restore WHERE2RESTORE "Sind Sie sicher das Sie das BAckup hier entpacken wollen: "
+	if [ ! -d ${WHERE2RESTORE} ]
+	do
+		echo "| Verzeichnis ${WHERE2RESTORE} erstellt."
+		mkdir -p ${WHERE2RESTORE}
+	done
+	cd ${WHERE2RESTORE}
+	tar xfz ${WHERE2FIND} ${WHERE2RESTORE}
 }
 
 function listbackup(){
 	yesno-dialog where2Find WHERE2FIND "Wo sollen nach den Backups gesucht werden: "
 	for I in $(find ${WHERE2FIND} -maxdepth 1 \( -name "*tgz" -o -name "*xz" -o -name "*bzip2" \) )
 	do 
-	        echo "|> "$I
-    	done
+	    echo "|> "$I
+    done
 	yesno-dialog what2List WHAT2LIST "Sind Sie sicher das Sie dieses Backup auflisten wollen?" 
 	tar tf ${WHERE2LIST}
 	read -p "| Beliebige Taste drücken ..." 
@@ -37,8 +49,8 @@ function deletebackup(){
 	yesno-dialog where2Find WHERE2FIND "Wo sollen nach den Backups gesucht werden: "
 	for I in $(find ${WHERE2FIND} -maxdepth 1 \( -name "*tgz" -o -name "*xz" -o -name "*bzip2" \) )
 	do 
-	        echo "|> "$I
-    	done
+	    echo "|> "$I
+    done
    	yesno-dialog what2Del WHAT2DEL "Sind Sie sicher das Sie dieses Backup löschen wollen?" 
 	echo rm ${WHAT2DEL}
 	sleep 2
