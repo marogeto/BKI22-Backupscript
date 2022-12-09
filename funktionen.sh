@@ -61,6 +61,15 @@ function where2Find(){
 	read -p "| Eingabe: " WHERE2FIND 
 }
 
+# Eingeben des Backups, welches aufgelistet werden soll
+function what2List(){
+	clear
+	echo "|----------------------------------------------|"
+	echo "| Welches Backups soll gezeigt werden:         |"
+	echo "|                                              |"
+	read -p "| Eingabe: " WHAT2LIST 
+}
+
 # Eingeben des BAckup im absoluten Pfad, welches gelöscht werden soll
 function what2Del(){
 	echo "|----------------------------------------------|"
